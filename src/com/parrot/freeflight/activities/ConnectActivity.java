@@ -71,9 +71,7 @@ public class ConnectActivity
         droneConnectionChangeReceiver = new DroneConnectionChangedReceiver(this);
 
         bindService(new Intent(this, DroneControlService.class), this, Context.BIND_AUTO_CREATE);
-
     }
-
 
     private void prepareGoogleTVControls()
     {
@@ -106,7 +104,6 @@ public class ConnectActivity
     protected void onDestroy()
     {
         super.onDestroy();
-
         unbindService(this);
         Log.d(TAG, "Connect activity destroyed");
     }

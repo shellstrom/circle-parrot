@@ -185,7 +185,7 @@ public class ControlDroneActivity
         }
         
         deviceOrientationManager.onCreate();
-
+        
         bindService(new Intent(this, DroneControlService.class), mConnection, Context.BIND_AUTO_CREATE);
 
         Bundle bundle = getIntent().getExtras();

@@ -48,7 +48,7 @@
             android:maxLines="3"
             android:text="@string/PILOTING" android:layout_marginBottom="@dimen/dashboard_button_margin_vert" android:layout_weight="1"/>
 
-        <CheckedTextView
+        <!-- <CheckedTextView
             android:id="@+id/btnAcademy"
             style="@style/dashboardButton"
             android:layout_width="0dp"
@@ -61,9 +61,10 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/dashboard_button_height"
             android:text="@string/PHOTOS_VIDEOS" android:layout_marginBottom="@dimen/dashboard_button_margin_vert" android:layout_marginLeft="@dimen/dashboard_button_margin_hor" android:layout_weight="1"/>
+    	-->
     </LinearLayout>
 
-    <LinearLayout
+    <!-- <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginLeft="@dimen/dashboard_button_margin_hor" android:layout_marginRight="@dimen/dashboard_button_margin_hor" android:layout_marginBottom="@dimen/dashboard_button_margin_hor">
 
@@ -87,6 +88,6 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/dashboard_button_height"
             android:text="@string/DEMO" android:layout_marginLeft="@dimen/dashboard_button_margin_hor" android:layout_weight="1"/>
-    </LinearLayout>
+    </LinearLayout> -->
 
 </LinearLayout>
