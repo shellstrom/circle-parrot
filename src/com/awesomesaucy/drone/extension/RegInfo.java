@@ -1,10 +1,9 @@
 package com.awesomesaucy.drone.extension;
 
-import com.parrot.freeflight.*;
-
 import android.content.ContentValues;
 import android.content.Context;
 
+import com.parrot.freeflight.R;
 import com.sonyericsson.extras.liveware.aef.registration.Registration;
 import com.sonyericsson.extras.liveware.extension.util.ExtensionUtils;
 import com.sonyericsson.extras.liveware.extension.util.registration.RegistrationInformation;

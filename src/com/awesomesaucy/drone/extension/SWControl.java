@@ -31,10 +31,15 @@ import com.sonyericsson.extras.liveware.extension.util.sensor.AccessorySensorMan
  */
 class SWControl extends ControlExtension {
 
+	private static String TAG = "AwesomeDrone";
+	
     private int mCurrentSensor = 0;
 
     private List<AccessorySensor> mSensors = new ArrayList<AccessorySensor>();
 
+    long mLastTouch;
+    boolean flyMode = false;
+    
     private final AccessorySensorEventListener mListener = new AccessorySensorEventListener() {
 
         @Override
@@ -46,18 +51,31 @@ class SWControl extends ControlExtension {
             float y = data[1];
             float z = data[2];
             
+            // Rotation
             float yaw = y/10;
+            // Up/Down
             float gaz = x/5;
-            Log.d("Sensor", "yaw: "+yaw);
+
             if(yaw < -1) yaw = -1;
             if(yaw > 1) yaw = 1;
 
-            if(gaz < -1) gaz = 1;
+            if(gaz < -1) gaz = -1;
             if(gaz > 1) gaz = 1;
 
             try{
-            	ControlDroneActivity.droneControlService.setYaw(yaw);
-            	ControlDroneActivity.droneControlService.setGaz(gaz);
+
+            	
+	            if (flyMode) {
+	            	Log.d(TAG, "Flymode enabled, trying to move sideways...");
+	            	ControlDroneActivity.droneControlService.setPitch(gaz);
+	            	ControlDroneActivity.droneControlService.setRoll(yaw);
+	            } else {
+	            	Log.d(TAG, "Flymode disabled, trying to change altitude...");
+	            	ControlDroneActivity.droneControlService.setYaw(yaw);
+	            	ControlDroneActivity.droneControlService.setGaz(gaz);
+	            }
+	            
+            
             }catch(Exception e){
             	e.printStackTrace();
             }
@@ -87,6 +105,7 @@ class SWControl extends ControlExtension {
     @Override
     public void onResume() {
         Log.d(ExtensionDroneService.LOG_TAG, "Starting control");
+        setScreenState(Control.Intents.SCREEN_STATE_DIM);
         this.showLayout(com.parrot.freeflight.R.layout.sw_layout, null);
         register();
     }
@@ -112,17 +131,58 @@ class SWControl extends ControlExtension {
     @Override
     public void onTouch(ControlTouchEvent event) {
         super.onTouch(event);
-        if (event.getAction() == Control.Intents.TOUCH_ACTION_RELEASE) {
-	        try{
-	        	ControlDroneActivity.droneControlService.triggerTakeOff();
+        
+        if (event.getAction() == Control.Intents.TOUCH_ACTION_LONGPRESS) {
+    		try{
+	        	ControlDroneActivity.droneControlService.doLeftFlip();
 	        }catch(Exception e){
 	        	Log.e("Control", "exception in onTouch");
 	        	e.printStackTrace();
-	        }
+	        }        	
+        }
+        
+        if (event.getAction() == Control.Intents.TOUCH_ACTION_RELEASE) {
+        	
+        	boolean doubleTouch = System.currentTimeMillis() - mLastTouch < 500;
+        	
+        	if(doubleTouch) {
+        		try{
+    	        	ControlDroneActivity.droneControlService.triggerTakeOff();
+    	        }catch(Exception e){
+    	        	Log.e("Control", "exception in onTouch");
+    	        	e.printStackTrace();
+    	        }
+        	} else {
+        	
+        		toggleMode();
+        		
+        	}
+
+	        mLastTouch = System.currentTimeMillis();
 	    }
+        
+        
     }
 
-    private AccessorySensor getCurrentSensor() {
+    private void toggleMode() {
+		
+    	flyMode = !flyMode;
+    	
+    	
+    	
+    	ControlDroneActivity.droneControlService.setYaw(0);
+    	ControlDroneActivity.droneControlService.setGaz(0);
+    	ControlDroneActivity.droneControlService.setRoll(0);
+    	ControlDroneActivity.droneControlService.setPitch(0);
+    	
+    	
+        ControlDroneActivity.droneControlService.setProgressiveCommandEnabled(flyMode);
+        ControlDroneActivity.droneControlService.setProgressiveCommandCombinedYawEnabled(flyMode);
+		
+        sendText(com.parrot.freeflight.R.id.sw_text, "Fly mode: " + (flyMode ? "on" : "off"));
+	}
+
+	private AccessorySensor getCurrentSensor() {
         return mSensors.get(mCurrentSensor);
     }
 
@@ -132,11 +192,13 @@ class SWControl extends ControlExtension {
         if (sensor != null) {
             try {
                 if (sensor.isInterruptModeSupported()) {
-                    sensor.registerInterruptListener(mListener);
+                    //sensor.registerInterruptListener(mListener);
                 } else {
-                    sensor.registerFixedRateListener(mListener,
-                            Sensor.SensorRates.SENSOR_DELAY_UI);
+                    //sensor.registerFixedRateListener(mListener,
+                    //        Sensor.SensorRates.SENSOR_DELAY_NORMAL);
                 }
+                sensor.registerFixedRateListener(mListener,
+                        Sensor.SensorRates.SENSOR_DELAY_UI);
             } catch (AccessorySensorException e) {
                 Log.d(ExtensionDroneService.LOG_TAG, "Failed to register listener", e);
             }

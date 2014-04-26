@@ -96,6 +96,7 @@ public class ControlDroneActivity
     private static final int PITCH = 1;
     private static final int ROLL = 2;
 
+
     public static DroneControlService droneControlService;
     private ApplicationSettings settings;
     private SettingsDialog settingsDialog;
@@ -145,7 +146,7 @@ public class ControlDroneActivity
     private boolean isGoogleTV;
 
     private List<ButtonController> buttonControllers;
-        
+
     private ServiceConnection mConnection = new ServiceConnection()
     {
 
@@ -166,7 +167,7 @@ public class ControlDroneActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        
+
         if (isFinishing()) {
             return;
         }
