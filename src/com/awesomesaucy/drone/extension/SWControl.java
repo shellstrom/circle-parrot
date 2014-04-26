@@ -56,17 +56,21 @@ class SWControl extends ControlExtension {
             // Up/Down
             float gaz = x/5;
 
-            if(yaw < -1) yaw = -1;
-            if(yaw > 1) yaw = 1;
+            //if(yaw < -1) yaw = -1;
+            //if(yaw > 1) yaw = 1;
 
-            if(gaz < -1) gaz = -1;
-            if(gaz > 1) gaz = 1;
+            //if(gaz < -1) gaz = -1;
+            //if(gaz > 1) gaz = 1;
 
             try{
-
-            	
 	            if (flyMode) {
-	            	Log.d(TAG, "Flymode enabled, trying to move sideways...");
+	            	if ((gaz < 0.5 && gaz > 0) || (gaz > -0.5 && gaz < 0))
+	            		gaz = 0;
+	            	if ((yaw < 0.5 && yaw > 0) || (yaw > -0.5 && yaw < 0))
+	            		yaw = 0;
+	            	Log.d(TAG, "Doing left and right: x: " +x+ " y:" +y);
+	            	Log.d(TAG, "Pitch: " +gaz);
+	            	Log.d(TAG, "Roll: " +yaw);
 	            	ControlDroneActivity.droneControlService.setPitch(gaz);
 	            	ControlDroneActivity.droneControlService.setRoll(yaw);
 	            } else {
@@ -167,18 +171,19 @@ class SWControl extends ControlExtension {
     private void toggleMode() {
 		
     	flyMode = !flyMode;
-    	
-    	
-    	
-    	ControlDroneActivity.droneControlService.setYaw(0);
-    	ControlDroneActivity.droneControlService.setGaz(0);
-    	ControlDroneActivity.droneControlService.setRoll(0);
-    	ControlDroneActivity.droneControlService.setPitch(0);
-    	
+
+    	if (flyMode) {
+        	ControlDroneActivity.droneControlService.setYaw(0);
+        	ControlDroneActivity.droneControlService.setGaz(0);    		
+    	} else {
+        	ControlDroneActivity.droneControlService.setRoll(0);
+        	ControlDroneActivity.droneControlService.setPitch(0);    		
+    	}
     	
         ControlDroneActivity.droneControlService.setProgressiveCommandEnabled(flyMode);
-        ControlDroneActivity.droneControlService.setProgressiveCommandCombinedYawEnabled(flyMode);
-		
+        ControlDroneActivity.droneControlService.setProgressiveCommandCombinedYawEnabled(false);
+        ControlDroneActivity.running = flyMode;
+        
         sendText(com.parrot.freeflight.R.id.sw_text, "Fly mode: " + (flyMode ? "on" : "off"));
 	}
 
@@ -192,13 +197,11 @@ class SWControl extends ControlExtension {
         if (sensor != null) {
             try {
                 if (sensor.isInterruptModeSupported()) {
-                    //sensor.registerInterruptListener(mListener);
+                    sensor.registerInterruptListener(mListener);
                 } else {
-                    //sensor.registerFixedRateListener(mListener,
-                    //        Sensor.SensorRates.SENSOR_DELAY_NORMAL);
+                    sensor.registerFixedRateListener(mListener,
+                            Sensor.SensorRates.SENSOR_DELAY_NORMAL);
                 }
-                sensor.registerFixedRateListener(mListener,
-                        Sensor.SensorRates.SENSOR_DELAY_UI);
             } catch (AccessorySensorException e) {
                 Log.d(ExtensionDroneService.LOG_TAG, "Failed to register listener", e);
             }
