@@ -44,42 +44,24 @@ class SWControl extends ControlExtension {
 
         @Override
         public void onSensorEvent(AccessorySensorEvent sensorEvent) {
-            Log.d(ExtensionDroneService.LOG_TAG, "Listener: OnSensorEvent");
-            //updateCurrentDisplay(sensorEvent);
             float[] data = sensorEvent.getSensorValues();
             float x = data[0];
             float y = data[1];
             float z = data[2];
             
-            // Rotation
-            float yaw = y/10;
-            // Up/Down
-            float gaz = x/5;
-
-            //if(yaw < -1) yaw = -1;
-            //if(yaw > 1) yaw = 1;
-
-            //if(gaz < -1) gaz = -1;
-            //if(gaz > 1) gaz = 1;
+            // Rotation / Roll
+            float yaw = petersMagicThreshold(y, 2, 10);
+            // Height / Pitch
+            float gaz = petersMagicThreshold(x, 2, 5);
 
             try{
 	            if (flyMode) {
-	            	if ((gaz < 0.5 && gaz > 0) || (gaz > -0.5 && gaz < 0))
-	            		gaz = 0;
-	            	if ((yaw < 0.5 && yaw > 0) || (yaw > -0.5 && yaw < 0))
-	            		yaw = 0;
-	            	Log.d(TAG, "Doing left and right: x: " +x+ " y:" +y);
-	            	Log.d(TAG, "Pitch: " +gaz);
-	            	Log.d(TAG, "Roll: " +yaw);
 	            	ControlDroneActivity.droneControlService.setPitch(gaz);
 	            	ControlDroneActivity.droneControlService.setRoll(yaw);
 	            } else {
-	            	Log.d(TAG, "Flymode disabled, trying to change altitude...");
 	            	ControlDroneActivity.droneControlService.setYaw(yaw);
 	            	ControlDroneActivity.droneControlService.setGaz(gaz);
 	            }
-	            
-            
             }catch(Exception e){
             	e.printStackTrace();
             }
@@ -142,52 +124,65 @@ class SWControl extends ControlExtension {
 	        }catch(Exception e){
 	        	Log.e("Control", "exception in onTouch");
 	        	e.printStackTrace();
-	        }        	
+	        }
         }
         
         if (event.getAction() == Control.Intents.TOUCH_ACTION_RELEASE) {
-        	
-        	boolean doubleTouch = System.currentTimeMillis() - mLastTouch < 500;
-        	
-        	if(doubleTouch) {
-        		try{
-    	        	ControlDroneActivity.droneControlService.triggerTakeOff();
-    	        }catch(Exception e){
-    	        	Log.e("Control", "exception in onTouch");
-    	        	e.printStackTrace();
-    	        }
-        	} else {
-        	
-        		toggleMode();
-        		
-        	}
+            boolean doubleTouch = System.currentTimeMillis() - mLastTouch < 500;
+            if(doubleTouch) {
+                try{
+                    ControlDroneActivity.droneControlService.triggerTakeOff();
+                }catch(Exception e){
+                    Log.e("Control", "exception in onTouch");
+                    e.printStackTrace();
+                }
+            } else {
+                toggleMode();
+            }
+            mLastTouch = System.currentTimeMillis();
+         }
 
-	        mLastTouch = System.currentTimeMillis();
-	    }
-        
-        
+    }
+
+    private float petersMagicThreshold(float x, float from, float to) {
+        if (x > 0) {
+            if (x < from) return 0;
+            else {
+            	float out = (x - from)/(to - from);
+            	return out > 1 ? 1 : out;
+            }
+            	
+        } else {
+            if (x > -from) return 0;
+            else {
+            	float out = (x + from) / (to - from);
+            	return out < -1 ? -1 : out;
+            }
+        }
     }
 
     private void toggleMode() {
-		
-    	flyMode = !flyMode;
+        flyMode = !flyMode;
 
-    	if (flyMode) {
-        	ControlDroneActivity.droneControlService.setYaw(0);
-        	ControlDroneActivity.droneControlService.setGaz(0);    		
-    	} else {
-        	ControlDroneActivity.droneControlService.setRoll(0);
-        	ControlDroneActivity.droneControlService.setPitch(0);    		
-    	}
-    	
+        if (flyMode) {
+            // Stop Height/Rotation movement
+            ControlDroneActivity.droneControlService.setYaw(0);
+            ControlDroneActivity.droneControlService.setGaz(0);
+        } else {
+            // Stop Pitch/Rotation movement
+            ControlDroneActivity.droneControlService.setRoll(0);
+            ControlDroneActivity.droneControlService.setPitch(0);
+            //sendImage(R., com.parrot.freeflight.R.drawable.rotate_mode);
+        }
+
         ControlDroneActivity.droneControlService.setProgressiveCommandEnabled(flyMode);
         ControlDroneActivity.droneControlService.setProgressiveCommandCombinedYawEnabled(false);
         ControlDroneActivity.running = flyMode;
         
         sendText(com.parrot.freeflight.R.id.sw_text, "Fly mode: " + (flyMode ? "on" : "off"));
-	}
+    }
 
-	private AccessorySensor getCurrentSensor() {
+    private AccessorySensor getCurrentSensor() {
         return mSensors.get(mCurrentSensor);
     }
 
