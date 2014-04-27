@@ -67,6 +67,7 @@ import com.parrot.freeflight.sensors.DeviceOrientationManager;
 import com.parrot.freeflight.sensors.DeviceSensorManagerWrapper;
 import com.parrot.freeflight.sensors.RemoteSensorManagerWrapper;
 import com.parrot.freeflight.service.DroneControlService;
+import com.parrot.freeflight.service.listeners.DroneUpdaterListener;
 import com.parrot.freeflight.settings.ApplicationSettings;
 import com.parrot.freeflight.settings.ApplicationSettings.ControlMode;
 import com.parrot.freeflight.settings.ApplicationSettings.EAppSettingProperty;
@@ -79,6 +80,7 @@ import com.parrot.freeflight.ui.hud.AnalogueJoystick;
 import com.parrot.freeflight.ui.hud.JoystickBase;
 import com.parrot.freeflight.ui.hud.JoystickFactory;
 import com.parrot.freeflight.ui.hud.JoystickListener;
+import com.parrot.freeflight.updater.UpdaterCommand;
 import com.parrot.freeflight.utils.NookUtils;
 import com.parrot.freeflight.utils.SystemUtils;
 
@@ -96,7 +98,8 @@ public class ControlDroneActivity
 
     private static final int PITCH = 1;
     private static final int ROLL = 2;
-
+    
+    public static ControlDroneActivity controlDroneActivity;
 
     public static DroneControlService droneControlService;
     private ApplicationSettings settings;
@@ -111,7 +114,7 @@ public class ControlDroneActivity
    // private boolean forceCombinedControlMode;
 
     private int screenRotationIndex;
-
+    
     private WifiSignalStrengthChangedReceiver wifiSignalReceiver;
     private DroneVideoRecordingStateReceiver videoRecordingStateReceiver;
     private DroneEmergencyChangeReceiver droneEmergencyReceiver;
@@ -119,7 +122,7 @@ public class ControlDroneActivity
     private DroneFlyingStateReceiver droneFlyingStateReceiver;
     private DroneCameraReadyChangeReceiver droneCameraReadyChangedReceiver;
     private DroneRecordReadyChangeReceiver droneRecordReadyChangeReceiver;
-
+    
     private SoundPool soundPool;
     private int batterySoundId;
     private int effectsStreamId;
@@ -167,7 +170,7 @@ public class ControlDroneActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
+        controlDroneActivity = this;
         if (isFinishing()) {
             return;
         }
@@ -208,7 +211,6 @@ public class ControlDroneActivity
         initRegularJoystics();       
 
         view = new HudViewController(this, useSoftwareRendering);
-
         wifiSignalReceiver = new WifiSignalStrengthChangedReceiver(this);
         videoRecordingStateReceiver = new DroneVideoRecordingStateReceiver(this);
         droneEmergencyReceiver = new DroneEmergencyChangeReceiver(this);
@@ -228,6 +230,7 @@ public class ControlDroneActivity
         
         view.setCameraButtonEnabled(false);
         view.setRecordButtonEnabled(false);
+        	
     }
     
     private void applyHandDependendTVControllers()
@@ -879,7 +882,7 @@ public class ControlDroneActivity
         } else {
             stopEmergencySound();
         }
-
+        
         controlLinkAvailable = (code != NavData.ERROR_STATE_NAVDATA_CONNECTION); 
         
         if (!controlLinkAvailable) {

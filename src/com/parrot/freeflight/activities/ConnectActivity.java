@@ -179,18 +179,15 @@ public class ConnectActivity
         }
     }
 
-
     public void onDroneDisconnected()
     {
         // Left unimplemented
     }
 
-
     public void onServiceDisconnected(ComponentName name)
     {
         // Left unimplemented
     }
-
 
     protected void setAutoSkip(boolean theSkip)
     {
@@ -198,7 +195,6 @@ public class ConnectActivity
                 .putBoolean(AUTO_SKIPP_KEY, theSkip)
                 .commit();
     }
-
 
     protected boolean getAutoSkip()
     {

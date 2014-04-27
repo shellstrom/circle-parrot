@@ -44,9 +44,9 @@ public class SplashActivity
     private Thread thread;
     private boolean isActive;
     private int timeElapsed = 0;
-    private LinearLayout splashBackgroundView;
-    private View videoContainer;
-    private VideoView videoView;
+//    private LinearLayout splashBackgroundView;
+//    private View videoContainer;
+//    private VideoView videoView;
 
 
     @Override
@@ -64,18 +64,18 @@ public class SplashActivity
 
         setContentView(R.layout.splash_screen);
         
-        videoContainer = (View) findViewById(R.id.videoContainer);
-        videoView = (VideoView) findViewById(R.id.videoView);
-        if (videoView != null) {
-            if (rawResourceExists(VIDEO_FILE_NAME)) {
-                playIntro = true;
-                Uri video = Uri.parse("android.resource://" + getPackageName() + "/raw/" + VIDEO_FILE_NAME);
-                videoView.setVideoURI(video);
-            } else {
-                playIntro = false;
-            }
-        }
-        splashBackgroundView = (LinearLayout) findViewById(R.id.splash);
+//        videoContainer = (View) findViewById(R.id.videoContainer);
+//        videoView = (VideoView) findViewById(R.id.videoView);
+//        if (videoView != null) {
+//            if (rawResourceExists(VIDEO_FILE_NAME)) {
+//                playIntro = true;
+//                Uri video = Uri.parse("android.resource://" + getPackageName() + "/raw/" + VIDEO_FILE_NAME);
+//                videoView.setVideoURI(video);
+//            } else {
+//                playIntro = false;
+//            }
+//        }
+//        splashBackgroundView = (LinearLayout) findViewById(R.id.splash);
 
         isActive = true;
         thread = new Thread(this);
@@ -205,50 +205,50 @@ public class SplashActivity
 
     private void playIntro()
     {
-        runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-                splashBackgroundView.setVisibility(View.GONE);
-                videoContainer.setVisibility(View.VISIBLE);
-
-                videoView.setOnTouchListener(new OnTouchListener()
-                {
-
-                    public boolean onTouch(View v, MotionEvent event)
-                    {
-                        videoView.stopPlayback();
-                        videoView.setEnabled(false);
-                        videoContainer.setVisibility(View.GONE);
-
-                        startActivity(new Intent(SplashActivity.this, ConnectActivity.class));
-                        finish();
-
-                        return true;
-                    }
-                });
-
-                videoView.setOnCompletionListener(new OnCompletionListener()
-                {
-
-                    public void onCompletion(MediaPlayer mp)
-                    {
-                        proceedToNextActivity();
-                    }
-
-                });
-
-                videoView.start();
-            }
-        });
+//        runOnUiThread(new Runnable()
+//        {
+//            public void run()
+//            {
+//                splashBackgroundView.setVisibility(View.GONE);
+//                videoContainer.setVisibility(View.VISIBLE);
+//
+//                videoView.setOnTouchListener(new OnTouchListener()
+//                {
+//
+//                    public boolean onTouch(View v, MotionEvent event)
+//                    {
+//                        videoView.stopPlayback();
+//                        videoView.setEnabled(false);
+//                        videoContainer.setVisibility(View.GONE);
+//
+//                        startActivity(new Intent(SplashActivity.this, ConnectActivity.class));
+//                        finish();
+//
+//                        return true;
+//                    }
+//                });
+//
+//                videoView.setOnCompletionListener(new OnCompletionListener()
+//                {
+//
+//                    public void onCompletion(MediaPlayer mp)
+//                    {
+//                        proceedToNextActivity();
+//                    }
+//
+//                });
+//
+//                videoView.start();
+//            }
+//        });
     }
 
     private void proceedToNextActivity()
     {
-        if (videoContainer != null) {
-            videoContainer.setVisibility(View.GONE);
-        }
-
+//        if (videoContainer != null) {
+//            videoContainer.setVisibility(View.GONE);
+//        }
+//
         Intent dashboard = new Intent(SplashActivity.this, DashboardActivity.class);
         startActivity(dashboard);
     }

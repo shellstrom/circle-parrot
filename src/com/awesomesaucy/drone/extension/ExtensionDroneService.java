@@ -55,9 +55,6 @@ public class ExtensionDroneService extends ExtensionService {
     @Override
     public ControlExtension createControlExtension(String hostAppPackageName) {
     	boolean sw2 = DeviceInfoHelper.isSmartWatch2ApiAndScreenDetected(this, hostAppPackageName);
-    	if(sw2)
-    		return new SWControl(hostAppPackageName, this);
-    	else
-    		return new SW1Control(hostAppPackageName, this);
+    	return new SWControl(hostAppPackageName, this);
     }
 }
