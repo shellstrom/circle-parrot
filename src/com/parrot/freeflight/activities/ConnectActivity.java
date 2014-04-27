@@ -51,7 +51,6 @@ public class ConnectActivity
     private BroadcastReceiver droneReadyReceiver;
     private BroadcastReceiver droneConnectionChangeReceiver;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {

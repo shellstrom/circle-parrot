@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -161,16 +162,15 @@ public class ControlDroneActivity
         }
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        
+
         if (isFinishing()) {
             return;
         }
-        
+
         settings = getSettings();
 
         this.isGoogleTV = SystemUtils.isGoogleTV(this);
@@ -183,9 +183,9 @@ public class ControlDroneActivity
             screenRotationIndex = getWindow().getWindowManager().getDefaultDisplay().getRotation();
             deviceOrientationManager = new DeviceOrientationManager(new DeviceSensorManagerWrapper(this), this);
         }
-        
+
         deviceOrientationManager.onCreate();
-        
+
         bindService(new Intent(this, DroneControlService.class), mConnection, Context.BIND_AUTO_CREATE);
 
         Bundle bundle = getIntent().getExtras();
@@ -407,7 +407,6 @@ public class ControlDroneActivity
                         droneControlService.setProgressiveCommandCombinedYawEnabled(false);
                     }
                 }
-
                 running = true;
             }
         });
@@ -698,7 +697,7 @@ public class ControlDroneActivity
         if (view != null) {
             view.onDestroy();
         }
-
+        	
         this.deviceOrientationManager.destroy();
 
         soundPool.release();
@@ -743,7 +742,12 @@ public class ControlDroneActivity
 
     @Override
     protected void onResume()
-    {
+    {	
+    	//IntentFilter filter = new IntentFilter();
+    	//filter.addAction("");
+    	
+    	//registerReceiver(sensorReceiver, filter);
+    	
         if (view != null) {
             view.onResume();
         }
