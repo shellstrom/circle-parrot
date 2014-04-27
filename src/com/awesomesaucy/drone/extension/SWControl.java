@@ -141,7 +141,6 @@ class SWControl extends ControlExtension {
             }
             mLastTouch = System.currentTimeMillis();
          }
-
     }
 
     private float petersMagicThreshold(float x, float from, float to) {

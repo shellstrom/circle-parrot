@@ -1249,7 +1249,6 @@ public class ControlDroneActivity
         } else {
             // TODO: Provide alternative implementation. Probably using StatFs
         }
-        
         return lowOnSpace;
     }
 
