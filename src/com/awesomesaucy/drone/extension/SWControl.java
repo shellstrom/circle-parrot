@@ -93,6 +93,7 @@ class SWControl extends ControlExtension {
         Log.d(ExtensionDroneService.LOG_TAG, "Starting control");
         setScreenState(Control.Intents.SCREEN_STATE_DIM);
         this.showLayout(com.parrot.freeflight.R.layout.sw_layout, null);
+        sendText(com.parrot.freeflight.R.id.sw_pref, "Left arm");
         register();
     }
 
@@ -159,10 +160,10 @@ class SWControl extends ControlExtension {
             }
         }
     }
-
+    
     private void toggleMode() {
         flyMode = !flyMode;
-
+        
         if (flyMode) {
             // Stop Height/Rotation movement
             ControlDroneActivity.droneControlService.setYaw(0);

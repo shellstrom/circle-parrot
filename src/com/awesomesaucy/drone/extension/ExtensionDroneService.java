@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.sonyericsson.extras.liveware.extension.util.ExtensionService;
 import com.sonyericsson.extras.liveware.extension.util.control.ControlExtension;
+import com.sonyericsson.extras.liveware.extension.util.registration.DeviceInfoHelper;
 import com.sonyericsson.extras.liveware.extension.util.registration.RegistrationInformation;
 
 /**
@@ -53,6 +54,10 @@ public class ExtensionDroneService extends ExtensionService {
 
     @Override
     public ControlExtension createControlExtension(String hostAppPackageName) {
-        return new SWControl(hostAppPackageName, this);
+    	boolean sw2 = DeviceInfoHelper.isSmartWatch2ApiAndScreenDetected(this, hostAppPackageName);
+    	if(sw2)
+    		return new SWControl(hostAppPackageName, this);
+    	else
+    		return new SW1Control(hostAppPackageName, this);
     }
 }

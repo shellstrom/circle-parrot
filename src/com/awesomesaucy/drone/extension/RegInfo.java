@@ -17,12 +17,12 @@ public class RegInfo extends RegistrationInformation{
         }
         mContext = context;
 	}
-	
+
 	@Override
 	public int getRequiredNotificationApiVersion() {
 		return 0;
 	}
-	
+
 	@Override
     public int getRequiredControlApiVersion() {
         return 2;
@@ -37,8 +37,8 @@ public class RegInfo extends RegistrationInformation{
 
         ContentValues values = new ContentValues();
 
-        //values.put(Registration.ExtensionColumns.CONFIGURATION_ACTIVITY, SamplePreferenceActivity.class.getName());
-        values.put(Registration.ExtensionColumns.CONFIGURATION_TEXT, "conf");
+        //values.put(Registration.ExtensionColumns.CONFIGURATION_ACTIVITY, PreferenceActivity.class.getName());
+        values.put(Registration.ExtensionColumns.CONFIGURATION_TEXT, "Conf");
         values.put(Registration.ExtensionColumns.NAME, "Awesome drone controller");
         values.put(Registration.ExtensionColumns.EXTENSION_KEY, ExtensionDroneService.EXTENSION_KEY);
         values.put(Registration.ExtensionColumns.HOST_APP_ICON_URI, iconHostapp);
