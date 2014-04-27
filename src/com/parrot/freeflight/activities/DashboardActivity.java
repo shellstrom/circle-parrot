@@ -302,6 +302,9 @@ implements
             
             requestUpdateButtonsState();
             checkFirmware();
+            boolean ff = onStartFreeflight(); // Try to start freeflight
+            Log.d("Dashboard", "Did freeflight start? "+ff);
+            
         } else {
             Log.d(TAG, "AR.Drone connection [DISCONNECTED]");
         }
@@ -331,9 +334,9 @@ implements
         if (checkDroneConnectionTask != null && checkDroneConnectionTask.getStatus() != Status.FINISHED) {
             checkDroneConnectionTask.cancel(true);
         }
-        
+
         checkDroneConnectionTask = new CheckDroneNetworkAvailabilityTask() {
-            
+
                 @Override
                 protected void onPostExecute(Boolean result) {
                    onDroneAvailabilityChanged(result);

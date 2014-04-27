@@ -36,11 +36,11 @@ MediaStorageReceiverDelegate
 	private StatusBar header = null;
 	
 	private CheckedTextView btnFreeFlight;
-	private CheckedTextView btnAcademy;
+	/*private CheckedTextView btnAcademy;
 	private CheckedTextView btnPhotosVideos;
 	private CheckedTextView btnFirmwareUpdate;
 	private CheckedTextView btnParrotGames;
-	private CheckedTextView btnGetYourDrone;
+	private CheckedTextView btnGetYourDrone;*/
 
     private AlertDialog alertDialog;
 
@@ -72,22 +72,22 @@ MediaStorageReceiverDelegate
     private void initUI() 
 	{
 		btnFreeFlight     = (CheckedTextView) findViewById(R.id.btnFreeFlight);
-		btnAcademy        = (CheckedTextView) findViewById(R.id.btnAcademy);
+		/*btnAcademy        = (CheckedTextView) findViewById(R.id.btnAcademy);
 		btnPhotosVideos   = (CheckedTextView) findViewById(R.id.btnPhotosVideos);
 		btnFirmwareUpdate = (CheckedTextView) findViewById(R.id.btnFirmwareUpdate);
 		btnParrotGames    = (CheckedTextView) findViewById(R.id.btnGames);
-		btnGetYourDrone   = (CheckedTextView) findViewById(R.id.btnGetYourDrone);
+		btnGetYourDrone   = (CheckedTextView) findViewById(R.id.btnGetYourDrone);*/
 	}
 
 
 	private void initListeners()
 	{
 		btnFreeFlight.setOnClickListener(this);
-		btnAcademy.setOnClickListener(this);
+		/*btnAcademy.setOnClickListener(this);
 		btnPhotosVideos.setOnClickListener(this);
 		btnFirmwareUpdate.setOnClickListener(this);
 		btnParrotGames.setOnClickListener(this);
-		btnGetYourDrone.setOnClickListener(this);
+		btnGetYourDrone.setOnClickListener(this);*/
 	}
 
 	
@@ -129,11 +129,11 @@ MediaStorageReceiverDelegate
 			throw new IllegalStateException("Should be called from UI thread");
 
 		btnFreeFlight.setChecked(isFreeFlightEnabled());
-		btnAcademy.setChecked(isAcademyEnabled());
+		/*btnAcademy.setChecked(isAcademyEnabled());
 		btnPhotosVideos.setChecked(getPhotoVideoState().equals(EPhotoVideoState.READY));
 		btnFirmwareUpdate.setChecked(isFirmwareUpdateEnabled());
 		btnParrotGames.setChecked(isParrotGamesEnabled());
-		btnGetYourDrone.setChecked(isGuestSpaceEnabled());
+		btnGetYourDrone.setChecked(isGuestSpaceEnabled());*/
 	}
 
 	
@@ -149,7 +149,7 @@ MediaStorageReceiverDelegate
 				}
 
 				break;
-			case R.id.btnAcademy:
+			/*case R.id.btnAcademy:
 				// Open academy
 				if (!isAcademyEnabled() || !onStartAcademy())
 				{
@@ -194,7 +194,7 @@ MediaStorageReceiverDelegate
 				{
 					showErrorMessageForTime(v, getString(R.string.not_implemented_yet), 2000);
 				}
-				break;
+				break;*/
 		}
 	}
 

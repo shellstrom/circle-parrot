@@ -10,19 +10,19 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         layout="@layout/incl_status_bar" />
-
+<!-- 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp" android:layout_weight="1">
-
+-->
         <ImageView
             android:id="@+id/imgLogo"
             style="@style/dashboardLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ff2_logo_freeflight" android:layout_marginTop="@dimen/dashboard_logo_margin_top" android:paddingBottom="@dimen/dashboard_logo_padding_bottom" android:layout_centerInParent="true"/>
-
+            android:src="@drawable/sony" android:layout_marginTop="@dimen/dashboard_logo_margin_top" android:paddingBottom="@dimen/dashboard_logo_padding_bottom" android:layout_centerInParent="true"/>
+	<!--
         <TextView
             android:id="@+id/txtVersion"
             style="@style/dashboardLabelVersion"
@@ -32,7 +32,7 @@
             android:layout_marginLeft="@dimen/dashboard_label_version_margin_left"
             android:layout_toRightOf="@+id/imgLogo"
             android:text="@string/app_version" android:layout_alignBottom="@id/imgLogo" android:layout_marginBottom="@dimen/dashboard_label_version_margin_bottom"/>
-    </RelativeLayout>
+    </RelativeLayout> -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,7 +48,7 @@
             android:maxLines="3"
             android:text="@string/PILOTING" android:layout_marginBottom="@dimen/dashboard_button_margin_vert" android:layout_weight="1"/>
 
-        <CheckedTextView
+        <!-- <CheckedTextView
             android:id="@+id/btnAcademy"
             style="@style/dashboardButton"
             android:layout_width="0dp"
@@ -61,9 +61,10 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/dashboard_button_height"
             android:text="@string/PHOTOS_VIDEOS" android:layout_marginBottom="@dimen/dashboard_button_margin_vert" android:layout_marginLeft="@dimen/dashboard_button_margin_hor" android:layout_weight="1"/>
+    	-->
     </LinearLayout>
 
-    <LinearLayout
+    <!-- <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" android:gravity="center_vertical" android:layout_marginLeft="@dimen/dashboard_button_margin_hor" android:layout_marginRight="@dimen/dashboard_button_margin_hor" android:layout_marginBottom="@dimen/dashboard_button_margin_hor">
 
@@ -87,6 +88,6 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/dashboard_button_height"
             android:text="@string/DEMO" android:layout_marginLeft="@dimen/dashboard_button_margin_hor" android:layout_weight="1"/>
-    </LinearLayout>
+    </LinearLayout> -->
 
 </LinearLayout>
