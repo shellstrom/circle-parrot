@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.parrot.freeflight.R;
 import com.parrot.freeflight.activities.ControlDroneActivity;
 import com.parrot.freeflight.receivers.DroneEmergencyChangeReceiver;
 import com.parrot.freeflight.service.DroneControlService;
@@ -34,19 +35,18 @@ class SWControl extends ControlExtension {
 
 	private static String TAG = "AwesomeDrone";
 	
-    private int mCurrentSensor = 0;
-
+	private Context context;
+	private int mCurrentSensor = 0;
     private List<AccessorySensor> mSensors = new ArrayList<AccessorySensor>();
 
     long mLastTouch;
     boolean flyMode = false;
-    boolean fly = false;
-    boolean hover = false;
-	long startTime;
-	Context context;
-	private boolean runThread = true;
-
-	Thread thread;
+    boolean isFlying = false;
+    boolean isHovering = false;
+	
+    private long startTime;
+	private boolean runTimerThread = true;
+	private Thread timerThread;
 	
     private final AccessorySensorEventListener mListener = new AccessorySensorEventListener() {
 
@@ -55,20 +55,20 @@ class SWControl extends ControlExtension {
             float[] data = sensorEvent.getSensorValues();
             float x = data[0];
             float y = data[1];
-            float z = data[2];
+            //float z = data[2];
             
             // Rotation / Roll
-            float yaw = magicThreshold(y, 2, 9);
+            float leftRight = magicThreshold(y, 2, 9);
             // Height / Pitch
-            float gaz = magicThreshold(x, 2, 5);
+            float upDown = magicThreshold(x, 2, 5);
 
             try{
 	            if (flyMode) {
-	            	ControlDroneActivity.droneControlService.setPitch(gaz);
-	            	ControlDroneActivity.droneControlService.setRoll(yaw);
+	            	ControlDroneActivity.droneControlService.setPitch(upDown);
+	            	ControlDroneActivity.droneControlService.setRoll(leftRight);
 	            } else {
-	            	ControlDroneActivity.droneControlService.setYaw(yaw);
-	            	ControlDroneActivity.droneControlService.setGaz(gaz);
+	            	ControlDroneActivity.droneControlService.setYaw(leftRight);
+	            	ControlDroneActivity.droneControlService.setGaz(upDown);
 	            }
             }catch(Exception e){
             	e.printStackTrace();
@@ -85,6 +85,7 @@ class SWControl extends ControlExtension {
                 SensorTypeValue.ACCELEROMETER)) {
             mSensors.add(manager.getSensor(SensorTypeValue.ACCELEROMETER));
         }
+/*        
         // Add magnetic field sensor, if supported
         if (DeviceInfoHelper.isSensorSupported(context, hostAppPackageName,
                 SensorTypeValue.MAGNETIC_FIELD)) {
@@ -94,40 +95,41 @@ class SWControl extends ControlExtension {
         if (DeviceInfoHelper.isSensorSupported(context, hostAppPackageName, SensorTypeValue.LIGHT)) {
             mSensors.add(manager.getSensor(SensorTypeValue.LIGHT));
         }
+*/
     }
     
     public void toggleHover(){
-    	hover = !hover;
-    	int image = com.parrot.freeflight.R.drawable.state_hover;
+    	isHovering = !isHovering;
+    	int image = R.drawable.state_hover;
     	
-    	if(!hover && !flyMode)
-    		image = com.parrot.freeflight.R.drawable.state_control;
-    	else if(!hover && flyMode)
-    		image = com.parrot.freeflight.R.drawable.state_move;
+    	if(!isHovering && !flyMode)
+    		image = R.drawable.state_control;
+    	else if(!isHovering && flyMode)
+    		image = R.drawable.state_move;
     	
-    	sendImage(com.parrot.freeflight.R.id.sw_state, image);
+    	sendImage(R.id.sw_state, image);
     }
 
     @Override
     public void onResume() {
         Log.d(ExtensionDroneService.LOG_TAG, "Starting control");
         setScreenState(Control.Intents.SCREEN_STATE_DIM);
-        showLayout(com.parrot.freeflight.R.layout.sw_layout, null);
+        showLayout(R.layout.sw_layout, null);
         register();
         
-        thread = new Thread(timeTakingRunnable);
-        thread.start();
+        timerThread = new Thread(timeTakingRunnable);
+        timerThread.start();
         
         LocalBroadcastManager localBroadcastMgr = LocalBroadcastManager.getInstance(context);
         localBroadcastMgr.registerReceiver(emergencyReceiver, new IntentFilter(DroneControlService.DRONE_EMERGENCY_STATE_CHANGED_ACTION));
 
     }
     
-    DroneEmergencyChangeReceiver emergencyReceiver = new DroneEmergencyChangeReceiver(ControlDroneActivity.controlDroneActivity){
+    private DroneEmergencyChangeReceiver emergencyReceiver = new DroneEmergencyChangeReceiver(ControlDroneActivity.controlDroneActivity){
     	@Override
     	public void onReceive(Context context, Intent intent) 
     	{
-    		int code = intent.getIntExtra(DroneControlService.EXTRA_EMERGENCY_CODE, 0);
+    		//int code = intent.getIntExtra(DroneControlService.EXTRA_EMERGENCY_CODE, 0);
     		startVibrator(200, 200, 3);
     	}
     };
@@ -135,18 +137,18 @@ class SWControl extends ControlExtension {
     @Override
     public void onObjectClick(ControlObjectClickEvent event) {
     	int id = event.getLayoutReference();
-    	Log.d("control", "is long: "+(event.getClickType() == Control.Intents.CLICK_TYPE_LONG));
+    	Log.d(TAG, "is long: "+(event.getClickType() == Control.Intents.CLICK_TYPE_LONG));
     	
     	try{
 	    	switch(id){
-	    	case com.parrot.freeflight.R.id.picture_button:
+	    	case R.id.picture_button:
 	    		ControlDroneActivity.droneControlService.takePhoto();
 	    		break;
-	    	case com.parrot.freeflight.R.id.emergency_button:
+	    	case R.id.emergency_button:
 	    		ControlDroneActivity.droneControlService.triggerEmergency();
 	    		break;
-	    	case com.parrot.freeflight.R.id.time_text:
-	    	case com.parrot.freeflight.R.id.sw_state:
+	    	case R.id.time_text:
+	    	case R.id.sw_state:
 	    		toggleMode();
 	    		break;
 	    	}
@@ -163,7 +165,7 @@ class SWControl extends ControlExtension {
     @Override
     public void onDestroy() {
         unregisterAndDestroy();
-        runThread = false;
+        runTimerThread = false;
     }
 
     public static boolean isWidthSupported(Context context, int width) {
@@ -177,9 +179,9 @@ class SWControl extends ControlExtension {
     @Override
     public void onTouch(ControlTouchEvent event) {
         super.onTouch(event);
-        Log.d("control", "onTouch");
+        Log.d(TAG, "onTouch");
         if (event.getAction() == Control.Intents.TOUCH_ACTION_LONGPRESS) {
-        	Log.d("control", "longpress");
+        	Log.d(TAG, "longpress");
         	toggleHover();
         }/*else if (event.getAction() == Control.Intents.TOUCH_ACTION_RELEASE) {
             boolean doubleTouch = System.currentTimeMillis() - mLastTouch < 700;
@@ -204,42 +206,54 @@ class SWControl extends ControlExtension {
     	try{
         	ControlDroneActivity.droneControlService.doLeftFlip();
         }catch(Exception e){
-        	Log.e("Control", "exception in onTouch");
+        	Log.e(TAG, "exception in onTouch");
         	e.printStackTrace();
         }
     }
     
     private void toggleFly() {
-    	fly = !fly;
+    	isFlying = !isFlying;
     	
-    	int image = com.parrot.freeflight.R.drawable.state_stopped;
+    	int image = R.drawable.state_stopped;
     	
-    	if(fly && !flyMode)
-    		image = com.parrot.freeflight.R.drawable.state_control;
-    	else if(fly && flyMode)
-    		image = com.parrot.freeflight.R.drawable.state_move;
+    	if(isFlying && !flyMode)
+    		image = R.drawable.state_control;
+    	else if(isFlying && flyMode)
+    		image = R.drawable.state_move;
     	
-    	sendImage(com.parrot.freeflight.R.id.sw_state, image);
+    	sendImage(R.id.sw_state, image);
     	
     	try{
             ControlDroneActivity.droneControlService.triggerTakeOff();
         }catch(Exception e){
-            Log.e("Control", "exception in onTouch");
+            Log.e(TAG, "exception in onTouch");
             e.printStackTrace();
         }
     	
-    	if(fly){
+    	if(isFlying){
     		startTime = System.currentTimeMillis();
     		flyMode = false;
     	}
     	
 	}
 
+    /**
+     * Converts any real number (e.g. sensor value) into range -1..0..1.
+     * Used for thresholding small values while still having linear range.
+     * Works universally for positive and negative numbers.
+     * Simply: Take the values from..to as 0..1 and values -to..-from as -1..0.
+     * Everything outside the range is 0, 1 or -1.
+     * 
+     * @param x Value to convert
+     * @param from This is the minimal value which will represent 0 in result.
+     * @param to This is the maximal value which will represent 1 in result.
+     * @return Converted number in range -1..0..1.
+     */
 	private float magicThreshold(float x, float from, float to) {
         if (x > 0) {
             if (x < from) return 0;
             else if (x > to) return 1;
-            else return (x - from)/(to - from);
+            else return (x - from) / (to - from);
         } else {
             if (x > -from) return 0;
             else if (x < -to) return -1;
@@ -248,7 +262,7 @@ class SWControl extends ControlExtension {
     }
     
     private void toggleMode() {
-    	if(!fly || hover) return;
+    	if(!isFlying || isHovering) return;
     	
         flyMode = !flyMode;
         try{
@@ -260,7 +274,6 @@ class SWControl extends ControlExtension {
 	            // Stop Pitch/Rotation movement
 	            ControlDroneActivity.droneControlService.setRoll(0);
 	            ControlDroneActivity.droneControlService.setPitch(0);
-	            //sendImage(R., com.parrot.freeflight.R.drawable.rotate_mode);
 	        }
 	
 	        ControlDroneActivity.droneControlService.setProgressiveCommandEnabled(flyMode);
@@ -269,7 +282,8 @@ class SWControl extends ControlExtension {
         }catch(Exception e){
         	e.printStackTrace();
         }
-        sendImage(com.parrot.freeflight.R.id.sw_state, flyMode ? com.parrot.freeflight.R.drawable.state_move : com.parrot.freeflight.R.drawable.state_control);
+        int imageRes = flyMode ? R.drawable.state_move : R.drawable.state_control;
+        sendImage(R.id.sw_state, imageRes);
     }
 
     private AccessorySensor getCurrentSensor() {
@@ -310,15 +324,15 @@ class SWControl extends ControlExtension {
     	
 		@Override
 		public void run() {
-			while(runThread){
+			while(runTimerThread){
 				try {
 					Thread.sleep(823);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				float currentTime = (System.currentTimeMillis() - startTime) / (float) 1000;
-				if(fly)
-					sendText(com.parrot.freeflight.R.id.time_text, String.format("%.2fs", currentTime));
+				if(isFlying)
+					sendText(R.id.time_text, String.format("%.2fs", currentTime));
 			}
 		}
     };
