@@ -58,9 +58,9 @@ class SWControl extends ControlExtension {
             float z = data[2];
             
             // Rotation / Roll
-            float yaw = petersMagicThreshold(y, 2, 9);
+            float yaw = magicThreshold(y, 2, 9);
             // Height / Pitch
-            float gaz = petersMagicThreshold(x, 2, 5);
+            float gaz = magicThreshold(x, 2, 5);
 
             try{
 	            if (flyMode) {
@@ -235,20 +235,15 @@ class SWControl extends ControlExtension {
     	
 	}
 
-	private float petersMagicThreshold(float x, float from, float to) {
+	private float magicThreshold(float x, float from, float to) {
         if (x > 0) {
             if (x < from) return 0;
-            else {
-            	float out = (x - from)/(to - from);
-            	return out > 1 ? 1 : out;
-            }
-            	
+            else if (x > to) return 1;
+            else return (x - from)/(to - from);
         } else {
             if (x > -from) return 0;
-            else {
-            	float out = (x + from) / (to - from);
-            	return out < -1 ? -1 : out;
-            }
+            else if (x < -to) return -1;
+            else return (x + from) / (to - from);
         }
     }
     
