@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 import com.parrot.freeflight.receivers.MediaStorageReceiver;
 import com.parrot.freeflight.receivers.MediaStorageReceiverDelegate;
 import com.parrot.freeflight.ui.StatusBar;

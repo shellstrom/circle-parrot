@@ -23,7 +23,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.TextView;
 
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 import com.parrot.freeflight.drone.NavData;
 import com.parrot.freeflight.gestures.EnhancedGestureDetector;
 import com.parrot.freeflight.ui.hud.Button;

@@ -31,7 +31,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 import com.parrot.freeflight.drone.DroneConfig;
 import com.parrot.freeflight.drone.DroneConfig.EDroneVersion;
 import com.parrot.freeflight.settings.ApplicationSettings;

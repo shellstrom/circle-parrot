@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 import com.parrot.freeflight.activities.base.ParrotActivity;
 import com.parrot.freeflight.receivers.MediaReadyDelegate;
 import com.parrot.freeflight.receivers.MediaReadyReceiver;

@@ -9,7 +9,7 @@ package com.parrot.freeflight.ui.hud;
 
 import android.content.Context;
 
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 
 public class AcceleroJoystick 
 	extends JoystickBase

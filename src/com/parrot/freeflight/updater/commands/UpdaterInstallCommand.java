@@ -12,7 +12,7 @@ import android.net.wifi.SupplicantState;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 import com.parrot.freeflight.ui.ConnectScreenViewController.IndicatorState;
 import com.parrot.freeflight.updater.UpdateManager;
 

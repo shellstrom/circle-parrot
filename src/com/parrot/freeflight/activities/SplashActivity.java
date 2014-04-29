@@ -26,7 +26,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.VideoView;
 
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 import com.parrot.freeflight.activities.base.ParrotActivity;
 import com.parrot.freeflight.utils.DeviceCapabilitiesUtils;
 

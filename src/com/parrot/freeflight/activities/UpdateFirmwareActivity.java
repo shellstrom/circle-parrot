@@ -10,7 +10,7 @@ import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 import com.parrot.freeflight.activities.base.ParrotActivity;
 import com.parrot.freeflight.service.DroneControlService;
 import com.parrot.freeflight.ui.ConnectScreenViewController;

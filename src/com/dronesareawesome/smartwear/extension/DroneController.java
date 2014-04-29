@@ -1,4 +1,4 @@
-package com.awesomesaucy.drone.extension;
+package com.dronesareawesome.smartwear.extension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 import com.parrot.freeflight.activities.ControlDroneActivity;
 import com.parrot.freeflight.receivers.DroneEmergencyChangeReceiver;
 import com.parrot.freeflight.service.DroneControlService;
@@ -31,7 +31,7 @@ import com.sonyericsson.extras.liveware.extension.util.sensor.AccessorySensorMan
  * This class exists in one instance for every supported host application that
  * we have registered to
  */
-class SWControl extends ControlExtension {
+class DroneController extends ControlExtension {
 
 	private static String TAG = "AwesomeDrone";
 	
@@ -76,7 +76,7 @@ class SWControl extends ControlExtension {
         }
     };
 
-    SWControl(final String hostAppPackageName, final Context context) {
+    DroneController(final String hostAppPackageName, final Context context) {
         super(context, hostAppPackageName);
         this.context = context;
         AccessorySensorManager manager = new AccessorySensorManager(context, hostAppPackageName);
@@ -112,7 +112,7 @@ class SWControl extends ControlExtension {
 
     @Override
     public void onResume() {
-        Log.d(ExtensionDroneService.LOG_TAG, "Starting control");
+        Log.d(DroneService.LOG_TAG, "Starting control");
         setScreenState(Control.Intents.SCREEN_STATE_DIM);
         showLayout(R.layout.sw_layout, null);
         register();
@@ -291,7 +291,7 @@ class SWControl extends ControlExtension {
     }
 
     private void register() {
-        Log.d(ExtensionDroneService.LOG_TAG, "Register listener");
+        Log.d(DroneService.LOG_TAG, "Register listener");
         AccessorySensor sensor = getCurrentSensor();
         if (sensor != null) {
             try {
@@ -302,7 +302,7 @@ class SWControl extends ControlExtension {
                             Sensor.SensorRates.SENSOR_DELAY_NORMAL);
                 }
             } catch (AccessorySensorException e) {
-                Log.d(ExtensionDroneService.LOG_TAG, "Failed to register listener", e);
+                Log.d(DroneService.LOG_TAG, "Failed to register listener", e);
             }
         }
     }

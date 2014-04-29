@@ -1,14 +1,14 @@
-package com.awesomesaucy.drone.extension;
+package com.dronesareawesome.smartwear.extension;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-public class ExtensionReceiver extends BroadcastReceiver{
+public class DroneReceiver extends BroadcastReceiver{
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		intent.setClass(context, ExtensionDroneService.class);
+		intent.setClass(context, DroneService.class);
 		context.startService(intent);
 	}
 

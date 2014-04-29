@@ -16,7 +16,7 @@ import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 import com.parrot.freeflight.ui.gl.GLSprite;
 
 public abstract class JoystickBase extends Sprite

@@ -12,7 +12,7 @@ import android.widget.SeekBar;
 import android.widget.TableLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 
 public class ParrotSeekBar extends SeekBar {
 	

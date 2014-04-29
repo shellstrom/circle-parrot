@@ -17,7 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 import com.parrot.freeflight.tasks.MediaThumbnailExecutorManager;
 import com.parrot.freeflight.tasks.ThumbnailWorkerTaskDelegate;
 import com.parrot.freeflight.vo.MediaVO;

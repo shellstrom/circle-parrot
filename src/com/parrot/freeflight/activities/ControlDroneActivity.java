@@ -37,7 +37,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.parrot.freeflight.FreeFlightApplication;
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 import com.parrot.freeflight.activities.base.ParrotActivity;
 import com.parrot.freeflight.drone.DroneConfig;
 import com.parrot.freeflight.drone.DroneConfig.EDroneVersion;
@@ -251,7 +251,7 @@ public class ControlDroneActivity
 
             public void onChanged(JoystickBase joy, float x, float y)
             {
-            	Log.d("DRONE!!", "Let's roll and pitch: x:" +x+ " y:" +y);
+//            	Log.d("DRONE!!", "Let's roll and pitch: x:" +x+ " y:" +y);
                 if (droneControlService != null && acceleroEnabled == false && running == true) {
                     droneControlService.setRoll(x);
                     droneControlService.setPitch(-y);
@@ -263,14 +263,14 @@ public class ControlDroneActivity
             {
                 leftJoyPressed = true;
                 if (droneControlService != null) {
-                	Log.d("DRONE!!", "Set progressive command to true");
+//                	Log.d("DRONE!!", "Set progressive command to true");
                     droneControlService.setProgressiveCommandEnabled(true);
 
                     if (combinedYawEnabled && rightJoyPressed) {
-                    	Log.d("DRONE!!", "sets ProgressiveCommandCombinedYawEnabled to true");
+//                    	Log.d("DRONE!!", "sets ProgressiveCommandCombinedYawEnabled to true");
                         droneControlService.setProgressiveCommandCombinedYawEnabled(true);
                     } else {
-                    	Log.d("DRONE!!", "sets ProgressiveCommandCombinedYawEnabled to false");
+//                    	Log.d("DRONE!!", "sets ProgressiveCommandCombinedYawEnabled to false");
                         droneControlService.setProgressiveCommandCombinedYawEnabled(false);
                     }
                 }
@@ -284,11 +284,11 @@ public class ControlDroneActivity
                 leftJoyPressed = false;
 
                 if (droneControlService != null) {
-                	Log.d("DRONE!!", "Set progressiveCommandEnabled to false");
+//                	Log.d("DRONE!!", "Set progressiveCommandEnabled to false");
                     droneControlService.setProgressiveCommandEnabled(false);
 
                     if (combinedYawEnabled) {
-                    	Log.d("DRONE!!", "Set ProgressiveCommandCombinedYawEnabled to false");
+//                    	Log.d("DRONE!!", "Set ProgressiveCommandCombinedYawEnabled to false");
                         droneControlService.setProgressiveCommandCombinedYawEnabled(false);
                     }
                 }
@@ -315,10 +315,10 @@ public class ControlDroneActivity
 
                 if (droneControlService != null) {
                     if (combinedYawEnabled && leftJoyPressed) {
-                    	Log.d("DRONE!!", "Set progressiveCommandCombinedYawEnabled to true");
+//                    	Log.d("DRONE!!", "Set progressiveCommandCombinedYawEnabled to true");
                         droneControlService.setProgressiveCommandCombinedYawEnabled(true);
                     } else {
-                    	Log.d("DRONE!!", "Set progressiveCommandCombinedYawEnabled to false");
+//                    	Log.d("DRONE!!", "Set progressiveCommandCombinedYawEnabled to false");
                         droneControlService.setProgressiveCommandCombinedYawEnabled(false);
                     }
                 }
@@ -330,7 +330,7 @@ public class ControlDroneActivity
                 rightJoyPressed = false;
 
                 if (droneControlService != null && combinedYawEnabled) {
-                	Log.d("DRONE!!", "Set progressiveCommandCombinedYawEnabled to false");
+//                	Log.d("DRONE!!", "Set progressiveCommandCombinedYawEnabled to false");
                     droneControlService.setProgressiveCommandCombinedYawEnabled(false);
                 }
             }

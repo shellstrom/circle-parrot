@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.parrot.freeflight"
+    package="com.parrot.dronesareawesome.freeflight"
     android:installLocation="auto"
     android:versionCode="20000"
     android:versionName="2.0-SDK" >
@@ -43,7 +43,7 @@
         android:required="true" />
 	
 <application
-        android:name=".FreeFlightApplication"
+        android:name="com.parrot.freeflight.FreeFlightApplication"
         android:allowClearUserData="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
@@ -51,13 +51,14 @@
         android:theme="@style/FreeFlightTheme">
     
     	<activity 
-    	    android:name=".activities.SplashActivity.SettingsActivity"></activity>
+    	    android:name="com.parrot.freeflight.activities.SplashActivity.SettingsActivity"></activity>
 
         <activity
-            android:name=".activities.SplashActivity"
+            android:name="com.parrot.freeflight.activities.SplashActivity"
             android:configChanges="orientation"
-            android:excludeFromRecents="true"
+            android:excludeFromRecents="false"
             android:finishOnTaskLaunch="true"
+            android:clearTaskOnLaunch="true"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:noHistory="true"
@@ -70,65 +71,68 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ConnectActivity"
+            android:name="com.parrot.freeflight.activities.ConnectActivity"
             android:finishOnTaskLaunch="true"
+            android:clearTaskOnLaunch="true"
             android:noHistory="true"
             android:screenOrientation="landscape" android:excludeFromRecents="true" android:stateNotNeeded="true"/>
         <activity
-            android:name=".activities.ControlDroneActivity"
+            android:name="com.parrot.freeflight.activities.ControlDroneActivity"
             android:configChanges="touchscreen|keyboardHidden|orientation"
             android:finishOnTaskLaunch="true"
+            android:clearTaskOnLaunch="true"
             android:hardwareAccelerated="true"
             android:launchMode="singleInstance"
             android:screenOrientation="landscape"
             android:theme="@style/FreeFlightTheme.HudScreen" />
 
-        <service android:name=".service.DroneControlService" />
+        <service android:name="com.parrot.freeflight.service.DroneControlService" />
 
         <activity
-            android:name=".activities.MediaActivity"
+            android:name="com.parrot.freeflight.activities.MediaActivity"
             android:finishOnTaskLaunch="true"
             android:hardwareAccelerated="false"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activities.DashboardActivity"
+            android:name="com.parrot.freeflight.activities.DashboardActivity"
             android:finishOnTaskLaunch="true"
+            android:noHistory="true"
             android:hardwareAccelerated="false"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:theme="@style/FreeFlightTheme.Dashboard" />
         <activity
-            android:name=".activities.UpdateFirmwareActivity"
+            android:name="com.parrot.freeflight.activities.UpdateFirmwareActivity"
             android:finishOnTaskLaunch="true"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
             android:theme="@style/FreeFlightTheme.FirmwareUpdateScreen" />
         <activity
-            android:name=".activities.GalleryActivity"
+            android:name="com.parrot.freeflight.activities.GalleryActivity"
             android:finishOnTaskLaunch="true"
             android:hardwareAccelerated="true"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activities.GuestSpaceActivity"
+            android:name="com.parrot.freeflight.activities.GuestSpaceActivity"
             android:finishOnTaskLaunch="true"
             android:hardwareAccelerated="true"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".activities.BrowserActivity"
+            android:name="com.parrot.freeflight.activities.BrowserActivity"
             android:finishOnTaskLaunch="true"
             android:screenOrientation="landscape"
             android:theme="@style/FreeFlightTheme.BrowserScreen" >
         </activity>
 
-        <service android:name=".transcodeservice.TranscodingService" >
+        <service android:name="com.parrot.freeflight.transcodeservice.TranscodingService" >
         </service>
-        <service android:name=".updater.FirmwareUpdateService" >
+        <service android:name="com.parrot.freeflight.updater.FirmwareUpdateService" >
         </service>
 		<service 
-		    android:name="com.awesomesaucy.drone.extension.ExtensionDroneService"></service>
+		    android:name="com.dronesareawesome.smartwear.extension.DroneService"></service>
 		
         <receiver
-            android:name="com.awesomesaucy.drone.extension.ExtensionReceiver"
+            android:name="com.dronesareawesome.smartwear.extension.DroneReceiver"
             android:permission="com.sonyericsson.extras.liveware.aef.HOSTAPP_PERMISSION" >
             <intent-filter>
 

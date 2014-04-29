@@ -11,7 +11,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 
 public class CheckAcademyAvailabilityTask extends AsyncTask<Context, Integer, Boolean>
 {

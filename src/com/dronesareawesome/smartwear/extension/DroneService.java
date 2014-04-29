@@ -1,4 +1,4 @@
-package com.awesomesaucy.drone.extension;
+package com.dronesareawesome.smartwear.extension;
 
 
 import android.util.Log;
@@ -12,17 +12,17 @@ import com.sonyericsson.extras.liveware.extension.util.registration.Registration
  * The Sample Extension Service handles registration and keeps track of all
  * sensors on all accessories.
  */
-public class ExtensionDroneService extends ExtensionService {
+public class DroneService extends ExtensionService {
 
     public static final int NOTIFY_STOP_ALERT = 1;
 
     public static final String EXTENSION_KEY = "com.sonyericsson.extras.liveware.extension.sensorsample.key";
 
-    public static final String LOG_TAG = "SampleSensorExtension";
+    public static final String LOG_TAG = "DroneControl";
 
     public final String CLASS = getClass().getSimpleName();
 
-    public ExtensionDroneService() {
+    public DroneService() {
         super(EXTENSION_KEY);
     }
 
@@ -39,7 +39,7 @@ public class ExtensionDroneService extends ExtensionService {
 
     @Override
     protected RegistrationInformation getRegistrationInformation() {
-        return new RegInfo(this);
+        return new DroneRegistrationInformation(this);
     }
 
     /*
@@ -55,6 +55,7 @@ public class ExtensionDroneService extends ExtensionService {
     @Override
     public ControlExtension createControlExtension(String hostAppPackageName) {
     	boolean sw2 = DeviceInfoHelper.isSmartWatch2ApiAndScreenDetected(this, hostAppPackageName);
-    	return new SWControl(hostAppPackageName, this);
+    	return new DroneController(hostAppPackageName, this);
+    	
     }
 }

@@ -13,7 +13,7 @@ import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.WifiLock;
 import android.util.Log;
 
-import com.parrot.freeflight.R;
+import com.parrot.dronesareawesome.freeflight.R;
 import com.parrot.freeflight.drone.DroneConfig;
 import com.parrot.freeflight.ui.ConnectScreenViewController.IndicatorState;
 import com.parrot.freeflight.updater.UpdateManager;
