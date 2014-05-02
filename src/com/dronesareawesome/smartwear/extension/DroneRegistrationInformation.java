@@ -43,7 +43,7 @@ public class DroneRegistrationInformation extends RegistrationInformation{
 
 	@Override
     public ContentValues getExtensionRegistrationConfiguration() {
-		Log.d("DroneControl", "getExtensionRegistrationConfiguration");
+		Log.d(DroneService.LOG_TAG, "getExtensionRegistrationConfiguration");
         String iconHostapp = ExtensionUtils.getUriString(mContext, R.drawable.icon);
         String iconExtension = ExtensionUtils.getUriString(mContext, R.drawable.icon);
 
@@ -61,7 +61,7 @@ public class DroneRegistrationInformation extends RegistrationInformation{
 
     @Override
     public boolean isDisplaySizeSupported(int width, int height) {
-        return (DroneController.isWidthSupported(mContext, width) && DroneController.isHeightSupported(mContext, height));
+        return (SW2DroneController.isWidthSupported(mContext, width) && SW2DroneController.isHeightSupported(mContext, height));
     }
 
     @Override

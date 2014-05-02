@@ -31,10 +31,8 @@ import com.sonyericsson.extras.liveware.extension.util.sensor.AccessorySensorMan
  * This class exists in one instance for every supported host application that
  * we have registered to
  */
-class DroneController extends ControlExtension {
+class SW2DroneController extends ControlExtension {
 
-	private static String TAG = "AwesomeDrone";
-	
 	private Context context;
 	private int mCurrentSensor = 0;
     private List<AccessorySensor> mSensors = new ArrayList<AccessorySensor>();
@@ -76,7 +74,7 @@ class DroneController extends ControlExtension {
         }
     };
 
-    DroneController(final String hostAppPackageName, final Context context) {
+    SW2DroneController(final String hostAppPackageName, final Context context) {
         super(context, hostAppPackageName);
         this.context = context;
         AccessorySensorManager manager = new AccessorySensorManager(context, hostAppPackageName);
@@ -137,7 +135,7 @@ class DroneController extends ControlExtension {
     @Override
     public void onObjectClick(ControlObjectClickEvent event) {
     	int id = event.getLayoutReference();
-    	Log.d(TAG, "is long: "+(event.getClickType() == Control.Intents.CLICK_TYPE_LONG));
+    	Log.d(DroneService.LOG_TAG, "is long: "+(event.getClickType() == Control.Intents.CLICK_TYPE_LONG));
     	
     	try{
 	    	switch(id){
@@ -179,9 +177,9 @@ class DroneController extends ControlExtension {
     @Override
     public void onTouch(ControlTouchEvent event) {
         super.onTouch(event);
-        Log.d(TAG, "onTouch");
+        Log.d(DroneService.LOG_TAG, "onTouch");
         if (event.getAction() == Control.Intents.TOUCH_ACTION_LONGPRESS) {
-        	Log.d(TAG, "longpress");
+        	Log.d(DroneService.LOG_TAG, "longpress");
         	toggleHover();
         }/*else if (event.getAction() == Control.Intents.TOUCH_ACTION_RELEASE) {
             boolean doubleTouch = System.currentTimeMillis() - mLastTouch < 700;
@@ -206,7 +204,7 @@ class DroneController extends ControlExtension {
     	try{
         	ControlDroneActivity.droneControlService.doLeftFlip();
         }catch(Exception e){
-        	Log.e(TAG, "exception in onTouch");
+        	Log.e(DroneService.LOG_TAG, "exception in onTouch");
         	e.printStackTrace();
         }
     }
@@ -226,7 +224,7 @@ class DroneController extends ControlExtension {
     	try{
             ControlDroneActivity.droneControlService.triggerTakeOff();
         }catch(Exception e){
-            Log.e(TAG, "exception in onTouch");
+            Log.e(DroneService.LOG_TAG, "exception in onTouch");
             e.printStackTrace();
         }
     	

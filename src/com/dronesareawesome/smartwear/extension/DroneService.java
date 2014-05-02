@@ -18,7 +18,7 @@ public class DroneService extends ExtensionService {
 
     public static final String EXTENSION_KEY = "com.sonyericsson.extras.liveware.extension.sensorsample.key";
 
-    public static final String LOG_TAG = "DroneControl";
+    public static final String LOG_TAG = "SmartDrone";
 
     public final String CLASS = getClass().getSimpleName();
 
@@ -55,7 +55,13 @@ public class DroneService extends ExtensionService {
     @Override
     public ControlExtension createControlExtension(String hostAppPackageName) {
     	boolean sw2 = DeviceInfoHelper.isSmartWatch2ApiAndScreenDetected(this, hostAppPackageName);
-    	return new DroneController(hostAppPackageName, this);
+    	if(sw2) {
+    		Log.d(LOG_TAG, "Is a SmartWatch 2, creating SW2DroneController");
+    		return new SW2DroneController(hostAppPackageName, this);
+    	} else {
+    		Log.d(LOG_TAG, "Is a SmartWatch 1, creating SW1DroneController");
+    		return new SW1DroneController(hostAppPackageName, this);
+    	}
     	
     }
 }
