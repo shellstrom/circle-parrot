@@ -130,6 +130,11 @@
         </service>
 		<service 
 		    android:name="com.dronesareawesome.smartwear.extension.DroneService"></service>
+		<service android:name="com.sonyericsson.extras.liveware.extension.util.TunnelService" >
+            <intent-filter>
+                <action android:name="com.sonyericsson.extras.liveware.aef.tunnel.action.BIND" />
+            </intent-filter>
+        </service>
 		
         <receiver
             android:name="com.dronesareawesome.smartwear.extension.DroneReceiver"

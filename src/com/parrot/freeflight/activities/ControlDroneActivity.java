@@ -127,7 +127,7 @@ public class ControlDroneActivity
     private int batterySoundId;
     private int effectsStreamId;
 
-    private boolean combinedYawEnabled;
+    public static boolean combinedYawEnabled;
     private boolean acceleroEnabled;
     private boolean magnetoEnabled;
     private boolean magnetoAvailable;
@@ -244,6 +244,39 @@ public class ControlDroneActivity
         }
     }
 
+    /**
+     * About these joysticks...
+     * 
+     * When Joypad mode is OFF, combinedYawEnabled set to FALSE (phone tilt)
+     * --------------------------------------------------------
+     * Pressing the left joypad button will set:
+     * - progressiveCommandEnabled to TRUE
+     * - progressiveCommandCombinedYawEnabled to TRUE if right joypad button is pressed
+     * - running to TRUE
+     * Releasing the left joypad button will set:
+     * - progressiveCommandEnabled to FALSE
+     * - progressiveCommandCombinedYawEnabled to FALSE if right joypad button is pressed
+     * - running to FALSE
+     * Pressing the right joypad button will set:
+     * - setProgressiveCommandYawEnabled to TRUE only if left joypad button is pressed
+     * Releasing the right joypad button will set:
+     * - setProgressiveCommandYawEnabled to FALSE
+     * 
+     * When Joypad mode is ON, combinedYawEnabled set to TRUE (left thumb tilt)
+     * ------------------------------------------------------
+     * Pressing the left joypad button will set:
+     * - progressiveCommandEnabled to TRUE
+     * - progressiveCommandCombinedYawEnabled to TRUE if right joypad button is pressed
+     * - running to TRUE
+     * Releasing the left joypad button will set:
+     * - progressiveCommandEnabled to FALSE
+     * - progressiveCommandCombinedYawEnabled to FALSE if right joypad button is pressed
+     * - running to FALSE
+     * Pressing the right joypad button will set:
+     * - setProgressiveCommandYawEnabled to TRUE only if left joypad button is pressed
+     * Releasing the right joypad button will set:
+     * - setProgressiveCommandYawEnabled to FALSE
+     */
     private void initRegularJoystics()
     {
         rollPitchListener = new JoystickListener()
@@ -251,7 +284,7 @@ public class ControlDroneActivity
 
             public void onChanged(JoystickBase joy, float x, float y)
             {
-//            	Log.d("DRONE!!", "Let's roll and pitch: x:" +x+ " y:" +y);
+                Log.d("DRONE", "Let's roll and pitch: x:" +x+ " y:" +y);
                 if (droneControlService != null && acceleroEnabled == false && running == true) {
                     droneControlService.setRoll(x);
                     droneControlService.setPitch(-y);
@@ -261,38 +294,41 @@ public class ControlDroneActivity
             @Override
             public void onPressed(JoystickBase joy)
             {
+//                Log.d("DRONE", "Leftjoy pressed set to true");
+//                Log.d("DRONE", "combinedYawEnabled set to " +combinedYawEnabled);
                 leftJoyPressed = true;
                 if (droneControlService != null) {
-//                	Log.d("DRONE!!", "Set progressive command to true");
+//                    Log.d("DRONE", "Set progressiveCommandEnabled to true");
                     droneControlService.setProgressiveCommandEnabled(true);
 
                     if (combinedYawEnabled && rightJoyPressed) {
-//                    	Log.d("DRONE!!", "sets ProgressiveCommandCombinedYawEnabled to true");
+//                        Log.d("DRONE", "set progressiveCommandCombinedYawEnabled to true");
                         droneControlService.setProgressiveCommandCombinedYawEnabled(true);
                     } else {
-//                    	Log.d("DRONE!!", "sets ProgressiveCommandCombinedYawEnabled to false");
+//                        Log.d("DRONE", "set progressiveCommandCombinedYawEnabled to false");
                         droneControlService.setProgressiveCommandCombinedYawEnabled(false);
                     }
                 }
-
+//                Log.d("DRONE", "Set running to true");
                 running = true;
             }
 
             @Override
             public void onReleased(JoystickBase joy)
             {
+//                Log.d("DRONE", "Leftjoy pressed set to false");
+//                Log.d("DRONE", "combinedYawEnabled set to " +combinedYawEnabled);
                 leftJoyPressed = false;
-
                 if (droneControlService != null) {
-//                	Log.d("DRONE!!", "Set progressiveCommandEnabled to false");
+//                    Log.d("DRONE", "Set progressiveCommandEnabled to false");
                     droneControlService.setProgressiveCommandEnabled(false);
 
                     if (combinedYawEnabled) {
-//                    	Log.d("DRONE!!", "Set ProgressiveCommandCombinedYawEnabled to false");
+//                        Log.d("DRONE", "Set progressiveCommandCombinedYawEnabled to false");
                         droneControlService.setProgressiveCommandCombinedYawEnabled(false);
                     }
                 }
-
+//                Log.d("DRONE", "Set running to false");
                 running = false;
             }
         };
@@ -300,8 +336,8 @@ public class ControlDroneActivity
         gazYawListener = new JoystickListener()
         {
 
-            public void onChanged(JoystickBase joy, float x, float y)
-            {
+            public void onChanged(JoystickBase joy, float x, float y) {
+//                Log.d("DRONE", "Let's gaz and yaw: x:" +x+ " y:" +y);
                 if (droneControlService != null) {
                     droneControlService.setGaz(y);
                     droneControlService.setYaw(x);
@@ -311,14 +347,16 @@ public class ControlDroneActivity
             @Override
             public void onPressed(JoystickBase joy)
             {
+//                Log.d("DRONE", "Rightjoy pressed set to true");
+//                Log.d("DRONE", "combinedYawEnabled set to " +combinedYawEnabled);
                 rightJoyPressed = true;
 
                 if (droneControlService != null) {
                     if (combinedYawEnabled && leftJoyPressed) {
-//                    	Log.d("DRONE!!", "Set progressiveCommandCombinedYawEnabled to true");
+//                        Log.d("DRONE", "Set progressiveCommandCombinedYawEnabled to true");
                         droneControlService.setProgressiveCommandCombinedYawEnabled(true);
                     } else {
-//                    	Log.d("DRONE!!", "Set progressiveCommandCombinedYawEnabled to false");
+//                        Log.d("DRONE", "Set progressiveCommandCombinedYawEnabled to false");
                         droneControlService.setProgressiveCommandCombinedYawEnabled(false);
                     }
                 }
@@ -327,10 +365,11 @@ public class ControlDroneActivity
             @Override
             public void onReleased(JoystickBase joy)
             {
+//                Log.d("DRONE", "Rightjoy pressed set to false");
+//                Log.d("DRONE", "combinedYawEnabled set to " +combinedYawEnabled);
                 rightJoyPressed = false;
-
                 if (droneControlService != null && combinedYawEnabled) {
-//                	Log.d("DRONE!!", "Set progressiveCommandCombinedYawEnabled to false");
+//                    Log.d("DRONE", "Set progressiveCommandCombinedYawEnabled to false");
                     droneControlService.setProgressiveCommandCombinedYawEnabled(false);
                 }
             }
