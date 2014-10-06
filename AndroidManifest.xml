@@ -26,8 +26,10 @@
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="com.sonyericsson.extras.liveware.aef.EXTENSION_PERMISSION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    
+    <uses-permission android:name="com.sonyericsson.extras.liveware.aef.EXTENSION_PERMISSION" />
+    <uses-permission android:name="com.sony.smarteyeglass.permission.SMARTEYEGLASS" />
 	
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -128,8 +130,7 @@
 		    android:name="com.awesomesaucy.drone.extension.ExtensionDroneService"></service>
 		
         <receiver
-            android:name="com.awesomesaucy.drone.extension.ExtensionReceiver"
-            android:permission="com.sonyericsson.extras.liveware.aef.HOSTAPP_PERMISSION" >
+            android:name="com.awesomesaucy.drone.extension.ExtensionReceiver">
             <intent-filter>
 
                 <!-- Generic extension intents. -->
@@ -161,12 +162,6 @@
             </intent-filter>
         </receiver>
         
-        <uses-library
-            android:name="com.sony.btv.remotesensor"
-            android:required="false" />
-        <uses-library
-            android:name="com.google.android.tv"
-            android:required="false" />
     </application>
 
 </manifest>
