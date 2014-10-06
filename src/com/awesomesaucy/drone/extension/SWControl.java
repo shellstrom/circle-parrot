@@ -43,11 +43,7 @@ class SWControl extends ControlExtension {
     boolean flyMode = false;
     boolean isFlying = false;
     boolean isHovering = false;
-	
-    private long startTime;
-	private boolean runTimerThread = true;
-	private Thread timerThread;
-	
+		
     private final AccessorySensorEventListener mListener = new AccessorySensorEventListener() {
 
         @Override
@@ -117,9 +113,6 @@ class SWControl extends ControlExtension {
         showLayout(R.layout.sw_layout, null);
         register();
         
-        timerThread = new Thread(timeTakingRunnable);
-        timerThread.start();
-        
         LocalBroadcastManager localBroadcastMgr = LocalBroadcastManager.getInstance(context);
         localBroadcastMgr.registerReceiver(emergencyReceiver, new IntentFilter(DroneControlService.DRONE_EMERGENCY_STATE_CHANGED_ACTION));
 
@@ -147,7 +140,6 @@ class SWControl extends ControlExtension {
 	    	case R.id.emergency_button:
 	    		ControlDroneActivity.droneControlService.triggerEmergency();
 	    		break;
-	    	case R.id.time_text:
 	    	case R.id.sw_state:
 	    		toggleMode();
 	    		break;
@@ -165,7 +157,6 @@ class SWControl extends ControlExtension {
     @Override
     public void onDestroy() {
         unregisterAndDestroy();
-        runTimerThread = false;
     }
 
     public static boolean isWidthSupported(Context context, int width) {
@@ -231,7 +222,6 @@ class SWControl extends ControlExtension {
         }
     	
     	if(isFlying){
-    		startTime = System.currentTimeMillis();
     		flyMode = false;
     	}
     	
@@ -319,21 +309,5 @@ class SWControl extends ControlExtension {
         mSensors.clear();
         mSensors = null;
     }    
-    
-    Runnable timeTakingRunnable = new Runnable(){
-    	
-		@Override
-		public void run() {
-			while(runTimerThread){
-				try {
-					Thread.sleep(823);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				float currentTime = (System.currentTimeMillis() - startTime) / (float) 1000;
-				if(isFlying)
-					sendText(R.id.time_text, String.format("%.2fs", currentTime));
-			}
-		}
-    };
+
 }
