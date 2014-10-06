@@ -6,6 +6,7 @@ import android.content.Context;
 import com.parrot.freeflight.R;
 import com.sonyericsson.extras.liveware.aef.registration.Registration;
 import com.sonyericsson.extras.liveware.extension.util.ExtensionUtils;
+import com.sonyericsson.extras.liveware.extension.util.registration.DeviceInfoHelper;
 import com.sonyericsson.extras.liveware.extension.util.registration.RegistrationInformation;
 
 public class RegInfo extends RegistrationInformation{
@@ -62,8 +63,11 @@ public class RegInfo extends RegistrationInformation{
     }
 	
 	@Override
-	public boolean isDisplaySizeSupported(int w, int h){
-		return true;
+	public boolean isDisplaySizeSupported(int w, int h)
+	{
+		boolean sw2 = w == DeviceInfoHelper.getSmartWatch2Width(mContext) && h == DeviceInfoHelper.getSmartWatch2Height(mContext);
+		boolean seg = w == Helper.getSmartEyeglassWidth(mContext) && h == Helper.getSmartEyeglassHeight(mContext);
+		return sw2 || seg;
 	}
 
 }
