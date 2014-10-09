@@ -12,8 +12,8 @@ public class GLBGVideoSprite extends GLSprite
 	private static final String TAG = GLBGVideoSprite.class.getSimpleName();
 	
 	private android.graphics.Matrix matrix;
-	private Object videoFrameLock;
-	private Bitmap video;
+	public static Object videoFrameLock;
+	public static Bitmap video;
 	private float videoSize[]  = {0,0, //image width, height
 			                    0,0}; //
 	public int screenWidth;
