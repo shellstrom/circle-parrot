@@ -119,6 +119,8 @@ LocationListener
 
 	private ArrayList<String> mediaDownloaded;
 
+	public static DroneControlService instance;
+	public float lastGaz=0, lastRoll=0, lastPitch=0, lastYaw=0;
 
 
 	@Override
@@ -139,6 +141,7 @@ LocationListener
 	public void onCreate() 
 	{
 		super.onCreate();
+		instance = this;
 		droneVersion = EDroneVersion.UNKNOWN;
 		configLock = new Object();
 		workerThreadLock = new Object();
@@ -187,6 +190,7 @@ LocationListener
 	@Override
 	public void onDestroy() 
 	{
+		instance = null;
 	    super.onDestroy();
 		
 	    disconnect();
@@ -471,6 +475,7 @@ LocationListener
 	 */
 	public void setGaz(final float value)
 	{
+		lastGaz = value;
 		droneProxy.setControlValue(CONTROL_SET_GAZ, value);
 	}
 
@@ -480,6 +485,7 @@ LocationListener
 	 */
 	public void setRoll(final float value)
 	{
+		lastRoll = value;
 		droneProxy.setControlValue(CONTROL_SET_ROLL, value);
 	}
 
@@ -489,6 +495,7 @@ LocationListener
 	 */
 	public void setPitch(final float value)
 	{
+		lastPitch = value;
 		droneProxy.setControlValue(CONTROL_SET_PITCH, value);
 	}
 
@@ -498,9 +505,9 @@ LocationListener
 	 */
 	public void setYaw(final float value)
 	{
+		lastYaw = value;
 		droneProxy.setControlValue(CONTROL_SET_YAW, value);
 	}
-
 
 	/**
 	 * Method that sends all control values in one call.

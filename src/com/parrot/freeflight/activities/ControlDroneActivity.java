@@ -12,7 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.annotation.SuppressLint;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -67,7 +66,6 @@ import com.parrot.freeflight.sensors.DeviceOrientationManager;
 import com.parrot.freeflight.sensors.DeviceSensorManagerWrapper;
 import com.parrot.freeflight.sensors.RemoteSensorManagerWrapper;
 import com.parrot.freeflight.service.DroneControlService;
-import com.parrot.freeflight.service.listeners.DroneUpdaterListener;
 import com.parrot.freeflight.settings.ApplicationSettings;
 import com.parrot.freeflight.settings.ApplicationSettings.ControlMode;
 import com.parrot.freeflight.settings.ApplicationSettings.EAppSettingProperty;
@@ -80,7 +78,6 @@ import com.parrot.freeflight.ui.hud.AnalogueJoystick;
 import com.parrot.freeflight.ui.hud.JoystickBase;
 import com.parrot.freeflight.ui.hud.JoystickFactory;
 import com.parrot.freeflight.ui.hud.JoystickListener;
-import com.parrot.freeflight.updater.UpdaterCommand;
 import com.parrot.freeflight.utils.NookUtils;
 import com.parrot.freeflight.utils.SystemUtils;
 
@@ -99,9 +96,7 @@ public class ControlDroneActivity
     private static final int PITCH = 1;
     private static final int ROLL = 2;
     
-    public static ControlDroneActivity controlDroneActivity;
-
-    public static DroneControlService droneControlService;
+    private DroneControlService droneControlService;
     private ApplicationSettings settings;
     private SettingsDialog settingsDialog;
 
@@ -170,7 +165,7 @@ public class ControlDroneActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        controlDroneActivity = this;
+
         if (isFinishing()) {
             return;
         }
