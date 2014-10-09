@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -12,6 +11,7 @@ import android.util.Log;
 import com.parrot.freeflight.R;
 import com.parrot.freeflight.activities.ControlDroneActivity;
 import com.parrot.freeflight.receivers.DroneEmergencyChangeReceiver;
+import com.parrot.freeflight.receivers.DroneEmergencyChangeReceiverDelegate;
 import com.parrot.freeflight.service.DroneControlService;
 import com.sonyericsson.extras.liveware.aef.control.Control;
 import com.sonyericsson.extras.liveware.aef.registration.Registration.SensorTypeValue;
@@ -31,7 +31,7 @@ import com.sonyericsson.extras.liveware.extension.util.sensor.AccessorySensorMan
  * This class exists in one instance for every supported host application that
  * we have registered to
  */
-class SWControl extends ControlExtension {
+class SWControl extends ControlExtension implements DroneEmergencyChangeReceiverDelegate {
 
 	private static String TAG = "AwesomeDrone";
 	
@@ -60,11 +60,12 @@ class SWControl extends ControlExtension {
 
             try{
 	            if (flyMode) {
-	            	ControlDroneActivity.droneControlService.setPitch(upDown);
-	            	ControlDroneActivity.droneControlService.setRoll(leftRight);
+	            	DroneControlService.instance.setPitch(upDown);
+	            	DroneControlService.instance.setRoll(leftRight);
+	            	DroneControlService.instance.getDroneConfig().getTilt();
 	            } else {
-	            	ControlDroneActivity.droneControlService.setYaw(leftRight);
-	            	ControlDroneActivity.droneControlService.setGaz(upDown);
+	            	DroneControlService.instance.setYaw(leftRight);
+	            	DroneControlService.instance.setGaz(upDown);
 	            }
             }catch(Exception e){
             	e.printStackTrace();
@@ -118,14 +119,7 @@ class SWControl extends ControlExtension {
 
     }
     
-    private DroneEmergencyChangeReceiver emergencyReceiver = new DroneEmergencyChangeReceiver(ControlDroneActivity.controlDroneActivity){
-    	@Override
-    	public void onReceive(Context context, Intent intent) 
-    	{
-    		//int code = intent.getIntExtra(DroneControlService.EXTRA_EMERGENCY_CODE, 0);
-    		startVibrator(200, 200, 3);
-    	}
-    };
+    private DroneEmergencyChangeReceiver emergencyReceiver = new DroneEmergencyChangeReceiver(this);
 
     @Override
     public void onObjectClick(ControlObjectClickEvent event) {
@@ -135,10 +129,10 @@ class SWControl extends ControlExtension {
     	try{
 	    	switch(id){
 	    	case R.id.picture_button:
-	    		ControlDroneActivity.droneControlService.takePhoto();
+	    		DroneControlService.instance.takePhoto();
 	    		break;
 	    	case R.id.emergency_button:
-	    		ControlDroneActivity.droneControlService.triggerEmergency();
+	    		DroneControlService.instance.triggerEmergency();
 	    		break;
 	    	case R.id.sw_state:
 	    		toggleMode();
@@ -195,7 +189,7 @@ class SWControl extends ControlExtension {
     public void onSwipe(int direction) {
     	super.onSwipe(direction);
     	try{
-        	ControlDroneActivity.droneControlService.doLeftFlip();
+    		DroneControlService.instance.doLeftFlip();
         }catch(Exception e){
         	Log.e(TAG, "exception in onTouch");
         	e.printStackTrace();
@@ -215,7 +209,7 @@ class SWControl extends ControlExtension {
     	sendImage(R.id.sw_state, image);
     	
     	try{
-            ControlDroneActivity.droneControlService.triggerTakeOff();
+    		DroneControlService.instance.triggerTakeOff();
         }catch(Exception e){
             Log.e(TAG, "exception in onTouch");
             e.printStackTrace();
@@ -258,16 +252,16 @@ class SWControl extends ControlExtension {
         try{
 	        if (flyMode) {
 	            // Stop Height/Rotation movement
-	            ControlDroneActivity.droneControlService.setYaw(0);
-	            ControlDroneActivity.droneControlService.setGaz(0);
+	        	DroneControlService.instance.setYaw(0);
+	        	DroneControlService.instance.setGaz(0);
 	        } else {
 	            // Stop Pitch/Rotation movement
-	            ControlDroneActivity.droneControlService.setRoll(0);
-	            ControlDroneActivity.droneControlService.setPitch(0);
+	        	DroneControlService.instance.setRoll(0);
+	        	DroneControlService.instance.setPitch(0);
 	        }
 	
-	        ControlDroneActivity.droneControlService.setProgressiveCommandEnabled(flyMode);
-	        ControlDroneActivity.droneControlService.setProgressiveCommandCombinedYawEnabled(false);
+	        DroneControlService.instance.setProgressiveCommandEnabled(flyMode);
+	        DroneControlService.instance.setProgressiveCommandCombinedYawEnabled(false);
 	        ControlDroneActivity.running = flyMode;
         }catch(Exception e){
         	e.printStackTrace();
@@ -308,6 +302,11 @@ class SWControl extends ControlExtension {
         unregister();
         mSensors.clear();
         mSensors = null;
-    }    
+    }
+
+	@Override
+	public void onDroneEmergencyChanged(int code) {
+		startVibrator(200, 200, 3);
+	}    
 
 }
