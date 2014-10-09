@@ -476,7 +476,7 @@ LocationListener
 	public void setGaz(final float value)
 	{
 		lastGaz = value;
-		droneProxy.setControlValue(CONTROL_SET_GAZ, value);
+		try { droneProxy.setControlValue(CONTROL_SET_GAZ, value); } catch (Exception ex) {}
 	}
 
 	/**
@@ -486,7 +486,7 @@ LocationListener
 	public void setRoll(final float value)
 	{
 		lastRoll = value;
-		droneProxy.setControlValue(CONTROL_SET_ROLL, value);
+		try { droneProxy.setControlValue(CONTROL_SET_ROLL, value); } catch (Exception ex) {}
 	}
 
 	/**
@@ -496,7 +496,7 @@ LocationListener
 	public void setPitch(final float value)
 	{
 		lastPitch = value;
-		droneProxy.setControlValue(CONTROL_SET_PITCH, value);
+		try { droneProxy.setControlValue(CONTROL_SET_PITCH, value); } catch (Exception ex) {}
 	}
 
 	/**
@@ -506,7 +506,7 @@ LocationListener
 	public void setYaw(final float value)
 	{
 		lastYaw = value;
-		droneProxy.setControlValue(CONTROL_SET_YAW, value);
+		try { droneProxy.setControlValue(CONTROL_SET_YAW, value); } catch (Exception ex) {}
 	}
 
 	/**

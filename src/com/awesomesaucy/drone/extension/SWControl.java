@@ -62,7 +62,6 @@ class SWControl extends ControlExtension implements DroneEmergencyChangeReceiver
 	            if (flyMode) {
 	            	DroneControlService.instance.setPitch(upDown);
 	            	DroneControlService.instance.setRoll(leftRight);
-	            	DroneControlService.instance.getDroneConfig().getTilt();
 	            } else {
 	            	DroneControlService.instance.setYaw(leftRight);
 	            	DroneControlService.instance.setGaz(upDown);
@@ -113,6 +112,9 @@ class SWControl extends ControlExtension implements DroneEmergencyChangeReceiver
         setScreenState(Control.Intents.SCREEN_STATE_DIM);
         showLayout(R.layout.sw_layout, null);
         register();
+        
+        //HACK TODO remove
+        DroneControlService.instance = new DroneControlService();
         
         LocalBroadcastManager localBroadcastMgr = LocalBroadcastManager.getInstance(context);
         localBroadcastMgr.registerReceiver(emergencyReceiver, new IntentFilter(DroneControlService.DRONE_EMERGENCY_STATE_CHANGED_ACTION));
